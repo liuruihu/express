@@ -1,0 +1,78 @@
+var express = require('express');
+var app = express();
+app.set('port',process.env.PORT || 3000);
+
+//幸运虚拟饼干数组
+var fortunes = [
+    `Conquer your fears or they will conquer you.`,
+    `Rivers need springs.`,
+    `Do not fear what you don't know. `,
+    `You will have a pleasant surprise.`,
+    `Whenever possible,keep it simple.`
+];
+
+/*开始
+*设置handlebars视图引擎
+*/
+var handlebars = require('express3-handlebars')
+                .create({
+                    defaultLayout:'main'
+                });
+
+app.engine('handlebars',handlebars.engine);
+app.set('views','./views/layouts');//这个书上没写，可能指的是路径
+app.set('view engine','handlebars');
+/*结束
+*设置handlebars视图引擎
+*/
+
+app.use(express.static(__dirname +'/public'));
+
+
+/*开始
+*设置路由
+*/
+    //首页
+    app.get('/',function(req,res){
+        // res.type('text/plain');
+        // res.send('Meadowlark Travel,首页');
+        res.render('home');
+    });
+
+    //关于页面about
+    app.get('/about',function(req,res){
+        // res.type('text/plain');
+        // res.send('About Meadowlark Travel,关于页面');
+        var randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)];
+        res.render('about',{
+            fortune:randomFortune
+        });
+    });
+
+    //定制404页面
+    app.use(function(req,res){
+        // res.type('text/plain');
+        res.status(404);
+        // res.send('404 - Not Found');
+        res.render('404');
+    });
+
+    //定制500页面
+    app.use(function(err,req,res,next){
+        console.log(err.stack);
+        // res.type('text/plain');
+        res.status(500);
+        // res.send('500 - Server Error');
+        res.render('500');
+    });
+/*结束
+*设置路由
+*/
+
+
+
+
+
+app.listen(app.get('port'),function(){
+    console.log('Express started on http://localhost:'+app.get('port')+'; press Ctrl-C to terminate.');
+});
