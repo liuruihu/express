@@ -12,6 +12,7 @@ exports.getFortune=function(){
     return fortunes[idx]+666;
 }
 
+
 // exports={
 //     getFortune:function(){
 //         var idx = Math.floor(Math.random()*fortunes.length);
