@@ -2,14 +2,8 @@ var express = require('express');
 var app = express();
 app.set('port',process.env.PORT || 3000);
 
-//幸运虚拟饼干数组
-var fortunes = [
-    `Conquer your fears or they will conquer you.`,
-    `Rivers need springs.`,
-    `Do not fear what you don't know. `,
-    `You will have a pleasant surprise.`,
-    `Whenever possible,keep it simple.`
-];
+//引入'幸运虚拟饼干'模块
+var fortune = require('./library/fortune.js');
 
 /*开始
 *设置handlebars视图引擎
@@ -43,9 +37,8 @@ app.use(express.static(__dirname +'/public'));
     app.get('/about',function(req,res){
         // res.type('text/plain');
         // res.send('About Meadowlark Travel,关于页面');
-        var randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)];
         res.render('about',{
-            fortune:randomFortune
+            fortune:fortune.getFortune
         });
     });
 
