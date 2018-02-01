@@ -5,6 +5,7 @@ app.set('port',process.env.PORT || 3000);
 //引入'幸运虚拟饼干'模块
 var fortune = require('./library/fortune.js');
 
+
 /*开始
 *设置handlebars视图引擎
 */
@@ -38,7 +39,7 @@ app.use(express.static(__dirname +'/public'));
         // res.type('text/plain');
         // res.send('About Meadowlark Travel,关于页面');
         res.render('about',{
-            fortune:fortune.getFortune
+            fortune:fortune.getFortune()
         });
     });
 

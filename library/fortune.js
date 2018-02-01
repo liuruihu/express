@@ -9,5 +9,12 @@ var fortunes = [
 
 exports.getFortune=function(){
     var idx = Math.floor(Math.random()*fortunes.length);
-    return fortunes[idx];
+    return fortunes[idx]+666;
 }
+
+// exports={
+//     getFortune:function(){
+//         var idx = Math.floor(Math.random()*fortunes.length);
+//         return fortunes[idx]+333;
+//     }
+// }
