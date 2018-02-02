@@ -4,15 +4,55 @@
         <meta charset="utf-8">
         <title>Meadowlark Travel</title>
         <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            body{
+                background-color: #0003;
+                display: flex;
+                flex-direction: column;
+                color:#fff;
+                line-height: 2rem;
+            }
             html,body{
                 text-align: center;
+                height: 100%;
+            }
+            header,section,footer{
+                width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            header{
+                background-color: #0003;
+            }
+            header img{
+                width: 150px;
+                border-radius: 10px;
+            }
+            section{
+                background-color: #00000063;
+                text-align: left; text-indent: 2em; flex-grow: 1;
+            }
+            section h1{
+                text-align: center;
+            }
+            footer{
+                background-color: #000000b0;
             }
         </style>
     </head>
     <body>
         <header>
-            <img src="/img/logo.png" alt="Logo">
+            <img src="/img/liuruihu.png" alt="Logo">
         </header>
-        {{{body}}}
+        <section>
+            {{{body}}}
+        </section>
+        <footer>
+            <p>设为首页 ©2018 Baidu 使用百度前必读 意见反馈 京ICP证030173号</p>
+            <p>京公网安备11000002000001号</p>
+        </footer>
     </body>
 </html>
