@@ -27,6 +27,15 @@ app.use(express.static(__dirname +'/public'));
 /*开始
 *设置路由
 */
+
+    //测试页面的路由设置
+    app.use(function(req,res,next){
+        res.locals.showTests = app.get('env') !== 'production' && req.query.test ==='1';
+
+        next();
+    });
+
+
     //首页
     app.get('/',function(req,res){
         // res.type('text/plain');
