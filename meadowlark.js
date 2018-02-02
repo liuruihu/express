@@ -58,7 +58,15 @@ app.use(express.static(__dirname +'/public'));
         // res.type('text/plain');
         res.status(404);
         // res.send('404 - Not Found');
-        res.render('404');
+        var str='';
+        for(var name in req.headers){
+            str+=name+'='+req.headers[name]+';';
+        }
+
+        res.render('404',{
+            content:str
+        });
+        // res.render(str);
     });
 
     //定制500页面

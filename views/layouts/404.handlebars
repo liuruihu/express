@@ -1,1 +1,15 @@
 <h1>404 - Not Found</h1>
+<p></p>
+
+<script>
+    var str='{{content}}';
+    $('section p').html(
+        str.replace(/;/g,'<hr/>')
+    );
+</script>
+<style>
+    section p{
+        text-align: left;
+        text-indent: 0;
+    }
+</style>
