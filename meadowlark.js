@@ -48,7 +48,8 @@ app.use(express.static(__dirname +'/public'));
         // res.type('text/plain');
         // res.send('About Meadowlark Travel,关于页面');
         res.render('about',{
-            fortune:fortune.getFortune()
+            fortune:fortune.getFortune(),
+            pageTestScript:'/qa/tests-about.js'
         });
     });
 

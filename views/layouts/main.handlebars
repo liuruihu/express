@@ -3,6 +3,13 @@
     <head>
         <meta charset="utf-8">
         <title>Meadowlark Travel</title>
+
+        <!--引入测试框架  showTests的值是true还是false请看meadowlark.js的第一个路由-->
+        {{#if showTests}}
+            <link rel="stylesheet" href="/vendor/mocha.css">
+        {{/if}}
+        <script src="http://code.jquery.com/jquery-3.3.1.slim.js"></script>
+
         <style>
             *{
                 padding: 0;
@@ -54,5 +61,25 @@
             <p>设为首页 ©2018 Baidu 使用百度前必读 意见反馈 京ICP证030173号</p>
             <p>京公网安备11000002000001号</p>
         </footer>
+
+        <!--页面测试用代码，使用方法：在页面的网址后面加上参数test=1  -->
+        {{#if showTests}}
+            <div id='mocha'></div>
+            <script src='/vendor/mocha.js'></script>
+            <script src='/vendor/chai.js'></script>
+
+            <script>
+                mocha.ui('tdd');
+                var assert = chai.assert;
+            </script>
+
+            <script src='/qa/tests-global.js'></script>
+
+            {{#if pageTestScript}}
+                <script src='{{pageTestScript}}'></script>
+            {{/if}}
+
+            <script>mocha.run()</script>
+        {{/if}}
     </body>
 </html>
