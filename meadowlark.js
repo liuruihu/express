@@ -36,6 +36,7 @@ app.use(express.static(__dirname +'/public'));
     });
 
 
+    // app.disable('x-powered-by');
     //首页
     app.get('/',function(req,res){
         // res.type('text/plain');
@@ -63,9 +64,13 @@ app.use(express.static(__dirname +'/public'));
             str+=name+'='+req.headers[name]+';\\n';
         }
 
+        var util=require('util');
         res.render('404',{
-            content:str
+            content:str,
+            str:util.inspect(req.query),
+            key:req.query.a
         });
+        // console.log(reqStr);
         // res.render(str);
     });
 

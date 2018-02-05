@@ -1,9 +1,12 @@
-<h1>404 - Not Found</h1>
+<h1>404 - Not Found-------{{key}}</h1>
 <p></p>
 
 <script>
     var str='{{content}}';
-    console.log(str);
+    var obj='{{str}}';
+
+    console.log(obj.replace(/.*&#x27;(.*)&#x27;.*/,'$1'));
+
     $('section p').html(
         str.replace(/(;)(?=\n)/g,';<hr/>')
     );
