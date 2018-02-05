@@ -60,7 +60,7 @@ app.use(express.static(__dirname +'/public'));
         // res.send('404 - Not Found');
         var str='';
         for(var name in req.headers){
-            str+=name+'='+req.headers[name]+';';
+            str+=name+'='+req.headers[name]+';\\n';
         }
 
         res.render('404',{

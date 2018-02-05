@@ -3,8 +3,9 @@
 
 <script>
     var str='{{content}}';
+    console.log(str);
     $('section p').html(
-        str.replace(/;/g,'<hr/>')
+        str.replace(/(;)(?=\n)/g,';<hr/>')
     );
 </script>
 <style>
