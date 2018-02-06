@@ -54,6 +54,28 @@ app.use(express.static(__dirname +'/public'));
         });
     });
 
+
+
+    //test测试页面
+    app.get('/test:a',function(req,res){
+
+        res.render('test',{
+            currency:{
+                name:'United States dollars',
+                abbrev:'USD'
+            },
+            tours:[
+                { name:'Hood River',price:'$99.99'},
+                { name:'Oregon Coast',price:'$159.95'}
+            ],
+            specialsUrl:'/january-specials',
+            currencies:['USD','GBP','BTC']
+        });
+
+    });
+
+
+
     //定制404页面
     app.use(function(req,res){
         // res.type('text/plain');

@@ -1,0 +1,44 @@
+<style>
+    section{
+        text-indent: 0;
+    }
+</style>
+<!--  -->
+<h1>handlebars模板--块级表达式的种类</h1>
+<h2>一、each</h2>
+<ul>
+    {{#each tours}}
+        <!-- 这里是高级注释，浏览器不显示高级注释 -->
+        {{! I'm in a new block ... and the context has changed}}
+        <li>
+            {{name}}--{{price}}
+            {{#if ./../currencies}}
+                ({{./../../currency.abbrev}})
+            {{else}}
+                (无内容)
+            {{/if}}
+        </li>
+    {{else}}
+        <li>目前没有内容</li>
+    {{/each}}
+</ul>
+<h2>二、unless 和if用法正好相反</h2>
+<p>
+    {{#unless true}}
+    false显示了
+    {{else}}
+    false没显示
+    {{/unless}}
+</p>
+<h2>三、if用法</h2>
+<p>
+    {{#if true}}
+    ture显示了
+    {{else}}
+    ture没显示
+    {{/if}}
+</p>
+<p>说明：if,unless,each这几项里都可以有else,使用方法如下：</p>
+<p>if，这个就不用多说了，如果有，在条件为否的时候执行，如果没有，只执行条件成立的语句。</p>
+<p>unless,和if用法刚好相反，条件成立，不执行，条件不成立才执行；而如果有else，这里刚好执行条件成立的时候。</p>
+<p>each，是数组循环使用。else执行的情况是这样的，如果数组是同数组，或者上下文里没有这个属性，就执行</p>
