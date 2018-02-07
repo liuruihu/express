@@ -1,0 +1,19 @@
+<section style="width:auto">
+    <h1>我是组件</h1>
+    <div class="weatherWidget">
+        {{#each partials.weather.locations}}
+            <div class="location">
+                <h3>{{name}}</h3>
+                <a href="{{forecastUrl}}">
+                    <img src="{{iconUrl}}" alt="{{weather}}">
+                    {{weather}},{{temp}}
+                </a>
+            </div>
+        {{else}}
+            <p>我居然没有数据。。。</p>
+        {{/each}}
+        <small>Source:
+            <a href="http://www.wunderground.com">Weather Underground</a>
+        </small>
+    </div>
+</section>
