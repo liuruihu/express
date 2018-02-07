@@ -30,7 +30,7 @@ header nav {
     text-align: left; font-size: 20px;
 }
 header nav a{
-    text-decoration: none;
+    text-decoration: none; margin-right: 30px;
 }
 section{
     background-color: rgba(0,0,0,.4);
