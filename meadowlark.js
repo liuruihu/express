@@ -5,6 +5,17 @@ app.set('port',process.env.PORT || 3000);
 //引入'幸运虚拟饼干'模块
 var fortune = require('./library/fortune.js');
 
+//上传文件使用的formidable
+var formidable=require('formidable');
+
+
+//jquery 文件上传的，上传图片的缩略图包
+var  jqupload= require('jquery-file-upload-middleware');
+
+
+//node默认不支持req.body,为了使他可用，需要引入body-parser中间件
+var bodyParser=require('body-parser');
+app.use(bodyParser());
 
 /*开始
 *设置handlebars视图引擎
@@ -147,6 +158,68 @@ app.use(express.static(__dirname +'/public'));
 
         });
     });
+
+
+    //第一个提交 表单页面，newsletter
+    app.get('/newsletter',function(req,res){
+        res.render('newsletter',{
+            csrf:'我是隐藏的'
+        });
+    });
+    //表单提交的数据，到这个页面
+    app.post('/process',function(req,res){
+        // console.log('Form (from querystring):'+req.query.query);
+        // console.log('CSRF token (from hidden form field):'+req.body._csrf);
+        // console.log('Name (from visible form field):'+req.body.name);
+        // console.log('Email (from visible form field):'+req.body.email);
+        // res.redirect(303,'/thank-you');
+        if(req.xhr){
+            res.send({
+                success:true
+            });
+        }else{
+            res.redirect(303,'/thank-you');
+        }
+    });
+
+
+
+    //文件上传，这个案例是图片
+    app.get('/contest/vacation-photo',function(req,res){
+        var now=new Date();
+        res.render('../contest/vacation-photo',{
+            year:now.getFullYear(),
+            month:now.getMonth()
+        });
+    });
+
+    app.post('/contest/vacation-photo/:year/:month',function(req,res){
+        var form=new formidable.IncomingForm();
+        form.parse(req,function(err,fields,files){
+            if(err) return res.redirect(303,'/error');
+
+            console.log('received fields\n',fields,'\n','received files:\n',files);
+
+            res.redirect(303,'/thank - you');
+        });
+    });
+
+
+    //jquery文件上传中间件
+    app.use('/upload',function(req,res,next){
+        var now=Date.now();
+        jqupload.fileHandler({
+            uploadDir:function(){
+                return __dirname+'/public/upload/'//+now;
+            }
+            // ,
+            // uploadUrl:function(){
+            //     return '/upload/'+now;
+            // }
+        })(req,res,next);
+    });
+
+
 
 
 

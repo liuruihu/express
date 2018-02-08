@@ -7,7 +7,7 @@
     var str='{{content}}';
     var obj='{{str}}';
 
-    console.log(obj.replace(/.*&#x27;(.*)&#x27;.*/,'$1'));
+    // console.log(obj.replace(/.*&#x27;(.*)&#x27;.*/,'$1'));
 
     $('section p').html(
         str.replace(/(;)(?=\n)/g,';<hr/>')
