@@ -48,14 +48,12 @@
             done:function(e,data){
                 $.each(data.result.files,function(index,file){
                     $('#fileUploads').append(
-                        // $(`
-                        //     <div class='upload'>
-                        //     <span class='glyphicon glyphicon-ok'></span>
-                        //     ${111111}
-                        //     ${file.originalName}
-                        //     </div>
-                        // `)
-                        $('<p>成功了</p>')
+                        $(`
+                            <div class='upload'>
+                            <span class='glyphicon glyphicon-ok'></span>
+                            ${file.originalName}
+                            </div>
+                        `)
                     );
                 });
             }
