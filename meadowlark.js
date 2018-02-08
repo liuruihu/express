@@ -11,7 +11,14 @@ var fortune = require('./library/fortune.js');
 */
 var handlebars = require('express3-handlebars')
                 .create({
-                    defaultLayout:'main'
+                    defaultLayout:'main',
+                    helpers:{
+                        section:function(name,options){
+                            if(!this._sections)this._sections={};
+                            this._sections[name]=options.fn(this);
+                            return null;
+                        }
+                    }
                     // ,extname:'.hbs'//这里是改文件名后缀的，除了.hbs，不知道可不可以自定义后缀名
                 });
 
@@ -132,6 +139,14 @@ app.use(express.static(__dirname +'/public'));
         });
     });
 
+
+    //段落测试
+    app.get('/jqueryTest',function(req,res){
+        res.render('jqueryTest',{
+            layout:'otherLayout'
+
+        });
+    });
 
 
 

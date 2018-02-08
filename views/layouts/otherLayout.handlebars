@@ -3,9 +3,23 @@
     <head>
         <meta charset="utf-8">
         <title>我是其他模板</title>
+        {{{_sections.script}}}
     </head>
     <body>
         <h1>我是模板本身内容</h1>
         {{{body}}}
+        <section class="section1">
+                {{{_sections.style}}}
+        </section>
+        <section class="section2">
+                {{{_sections.header}}}
+        </section>
+        <section class="section3">
+                {{{body}}}
+        </section>
+        <section class="section4">
+                {{{_sections.footer}}}
+        </section>
+        {{> weather}}
     </body>
 </html>
