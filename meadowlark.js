@@ -207,15 +207,20 @@ app.use(express.static(__dirname +'/public'));
 
     //jquery文件上传中间件
     app.use('/upload',function(req,res,next){
+
+        // now()方法返回自1970年1月1日 00:00:00 UTC到当前时间的毫秒数，类型为Number。
+        // 因为 now() 是Date的一个静态函数，所以必须以 Date.now() 的形式来使用。
         var now=Date.now();
+
+
         jqupload.fileHandler({
             uploadDir:function(){
-                return __dirname+'/public/upload/'//+now;
+                return __dirname+'/public/upload/'+now;//这里设置文件上传到哪里的路径
+            },
+            //没有下面这些，照样能上传，不知怎么回事
+            uploadUrl:function(){
+                return '/upload/'+now;
             }
-            // ,
-            // uploadUrl:function(){
-            //     return '/upload/'+now;
-            // }
         })(req,res,next);
     });
 
