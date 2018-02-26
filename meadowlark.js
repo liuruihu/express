@@ -12,6 +12,87 @@ var formidable=require('formidable');
 //jquery 文件上传的，上传图片的缩略图包
 var  jqupload= require('jquery-file-upload-middleware');
 
+//引入凭证(cookie方面)
+var credentials=require('./credentials.js');
+
+var nodemailer = require('nodemailer');
+
+/*
+*设置邮件传输实例，下面两个，用其中一个，参数记得改成正确的
+*/
+// var mailTransport = nodemailer.createTransport('SMTP',{
+//     service:'Yahoo',
+//     auth:{
+//         user:credentials.gmail.user,
+//         pass:credentials.gmail.password
+//     }
+// });
+
+
+// var mailTransport = nodemailer.createTransport('SMTP',{
+//     host:'smtp.meadowlarktravel.com',
+//     secureConnection:true,   //用SSL端口：465
+//     auth:{
+//         user:credentials.gmail.user,
+//         pass:credentials.gmail.password
+//     }
+// });
+
+
+//测试
+// 开启一个 SMTP 连接池
+var mailTransport = nodemailer.createTransport('SMTP',{
+    pool:true,
+    host: "smtp.qq.com", // 主机
+    // secureConnection: true, // 使用 SSL
+
+    port: 465, // SMTP 端口
+    secure:true,
+    auth: {
+        // user: "xxxxxxxx@qq.com", // 账号
+        // pass: "xxxxxxxx" // 密码
+        user:credentials.gmail.user,
+        pass:credentials.gmail.password
+    }
+});
+
+// 设置邮件内容
+var mailOptions = {
+  from: "Fred Foo <1114846482@qq.com>", // 发件地址
+  to: "1114846482@qq.com", // 收件列表
+  subject: "Hello world", // 标题
+  html: "<b>thanks a for visiting!</b> 世界，你好！" // html 内容
+}
+
+// 发送邮件
+mailTransport.sendMail(mailOptions, function(error, response){
+  if(error){
+    console.log(error+1);
+  }else{
+    console.log("Message sent: " + response.message);
+  }
+  mailTransport.close(); // 如果没用，关闭连接池
+});
+
+/*
+*发送邮件
+*/
+// mailTransport.sendMail({
+//     from:`"Meadowlark Travel" <info@meadowlarktravel.com>`,//从哪里发送邮件
+//     //to:'liuruihu@qifadai.com',//发送给谁
+//     to:'joecustomer@gmail.com',
+//     subject:'标题',//发送邮件的标题
+//     text:'内容，你好!!!'//发送内容
+// },function(err){
+//     if(err)
+//     console.error('Unable to send email :' + err);
+// });
+
+//引入cookie的中间件cookie-parser中间件
+var cookieParser=require('cookie-parser');
+
+app.use(cookieParser(credentials.cookieSecret));
+
 
 //node默认不支持req.body,为了使他可用，需要引入body-parser中间件
 var bodyParser=require('body-parser');
@@ -101,14 +182,35 @@ app.use(express.static(__dirname +'/public'));
     app.get('/',function(req,res){
         // res.type('text/plain');
         // res.send('Meadowlark Travel,首页');
+        res.cookie('monster','nom nom');//设置cookie
+        res.cookie('signed_monster','nom nom',{signed:true});//设置签名cookie,true的时候值为加密模式，默认为false
 
-        res.render('home');
+
+        res.cookie('cookie','1111111111');
+
+
+
+
+        res.render('home',{
+            signed_cookie:req.signedCookies.signed_cookie,
+            cookie:req.cookies.cookie
+        });
     });
 
     //关于页面about
     app.get('/about',function(req,res){
         // res.type('text/plain');
         // res.send('About Meadowlark Travel,关于页面');
+
+        //测试删除首页种植的cookie
+        // res.clearCookie('cookie');
+        // res.clearCookie('cookie','signed_cookie');
+        res.cookie('signed_cookie','222222222',{
+            signed:true,
+            httpOnly:true,
+            maxAge:1000000,
+            path:'/about'
+        });
         res.render('about',{
             fortune:fortune.getFortune(),
             pageTestScript:'/qa/tests-about.js'
@@ -222,10 +324,23 @@ app.use(express.static(__dirname +'/public'));
                 return '/upload/'+now;
             }
         })(req,res,next);
+        // next();
     });
 
 
-
+    // app.use(function(req,res,next){
+    //     console.log('执行了');
+    //     next();
+    // });
+    // app.use(function(req,res,next){
+    //     console.log('再次执行了');
+    //     res.send('谢谢使用1');
+    //     // next();
+    // });
+    // app.use(function(req,res,next){
+    //     // res.send('谢谢使用2');
+    //     console.log('永远不会执行');
+    // });
 
 
 
@@ -266,5 +381,5 @@ app.use(express.static(__dirname +'/public'));
 
 
 app.listen(app.get('port'),function(){
-    console.log('Express started on http://localhost:'+app.get('port')+'; press Ctrl-C to terminate.');
+    console.log(`Express started on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
 });
