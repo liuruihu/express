@@ -41,8 +41,8 @@ var nodemailer = require('nodemailer');
 
 //测试
 // 开启一个 SMTP 连接池
-var mailTransport = nodemailer.createTransport('SMTP',{
-    pool:true,
+var mailTransport = nodemailer.createTransport({
+    // pool:true,
     host: "smtp.qq.com", // 主机
     // secureConnection: true, // 使用 SSL
 
@@ -53,12 +53,13 @@ var mailTransport = nodemailer.createTransport('SMTP',{
         // pass: "xxxxxxxx" // 密码
         user:credentials.gmail.user,
         pass:credentials.gmail.password
+        // type:'OAuth2'
     }
 });
 
 // 设置邮件内容
 var mailOptions = {
-  from: "Fred Foo <1114846482@qq.com>", // 发件地址
+  from: "1114846482@qq.com", // 发件地址
   to: "1114846482@qq.com", // 收件列表
   subject: "Hello world", // 标题
   html: "<b>thanks a for visiting!</b> 世界，你好！" // html 内容
@@ -74,6 +75,32 @@ mailTransport.sendMail(mailOptions, function(error, response){
   mailTransport.close(); // 如果没用，关闭连接池
 });
 
+
+
+// var transporter = nodemailer.createTransport({
+//     // service: '163',
+//     host: "smtp.163.com",
+//     port: 465, // SMTP 端口
+//     secure:true,
+//     auth: {
+//         user: 'liu1114846482',
+//         pass: credentials.gmail.password
+//     }
+// });
+// var mailOptions = {
+//     from: 'liu1114846482@163.com', // sender address
+//     to: 'liu1114846482@163.com', // list of receivers
+//     // subject: 'Hello ✔', // Subject line
+//     text: 'Hello world ✔', // plaintext body
+//     // html: '<b>Hello world ✔</b>' // html body
+// };
+// transporter.sendMail(mailOptions, function (error, info) {
+//     if (error) {
+//         console.log(error);
+//     } else {
+//         console.log('Message sent: ' + info.response);
+//     }
+// });
 /*
 *发送邮件
 */
