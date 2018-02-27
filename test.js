@@ -1,5 +1,57 @@
 var app=require('express')();
 
+var nodemailer = require('nodemailer');
+
+var config_email = {
+    host:'smtp.163.com',
+    port:'465',
+    // port:'25',
+    // secure:false,//默认为false
+    secure:true,
+    // secureConnection:true,
+    auth:{
+        user:'liu1114846482@163.com',
+        pass:'liu19890708'//设立时网易邮箱授权码
+    }
+}
+var transporter=nodemailer.createTransport(config_email);
+var data={
+    from:'liu1114846482@163.com',
+    to:'liu1114846482@163.com,liuruihu@ruilongjin.com',
+    cc:'liuruihu@qifadai.com',
+    subject:'163邮箱测试标题--secure--true--port--465',
+    html:'测试成功'
+}
+transporter.sendMail(data,function(err,info){
+    console.log(err);
+    if(err)
+        console.log('失败',err);
+    else {
+        console.log('成功',info.response);
+    }
+    // transporter.close();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.use(function(req,res,next){
     console.log('开始');
     next();

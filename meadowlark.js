@@ -41,79 +41,56 @@ var nodemailer = require('nodemailer');
 
 //测试
 // 开启一个 SMTP 连接池
-var mailTransport = nodemailer.createTransport({
-    // pool:true,
-    host: "smtp.qq.com", // 主机
-    // secureConnection: true, // 使用 SSL
-
-    port: 465, // SMTP 端口
-    secure:true,
-    auth: {
-        // user: "xxxxxxxx@qq.com", // 账号
-        // pass: "xxxxxxxx" // 密码
-        user:credentials.gmail.user,
-        pass:credentials.gmail.password
-        // type:'OAuth2'
+var config_email = {
+    host:'smtp.163.com',
+    // port:'465',
+    port:'25',
+    // secure:false,//默认为false
+    // secure:true,
+    // secureConnection:true,
+    auth:{
+        user:'liu1114846482@163.com',
+        pass:'liu19890708'//设立时网易邮箱授权码
     }
-});
+}
+var mailTransport = nodemailer.createTransport(config_email);
 
 // 设置邮件内容
 var mailOptions = {
-  from: "1114846482@qq.com", // 发件地址
-  to: "1114846482@qq.com", // 收件列表
-  subject: "Hello world", // 标题
-  html: "<b>thanks a for visiting!</b> 世界，你好！" // html 内容
+    from:'liu1114846482@163.com',
+    to:'liu1114846482@163.com,liuruihu@ruilongjin.com',
+    cc:'liuruihu@qifadai.com',
+    bcc:'1114846482@qq.com',
+    subject:'163邮箱测试标题---文本',
+    text:`
+        <h1>邮件内容的title</h1>
+        <p>邮件内容的内容</p>
+        `
+    // html:`
+    //     <h1>邮件内容的title</h1>
+    //     <p>邮件内容的内容</p>
+    //     `
 }
 
 // 发送邮件
-mailTransport.sendMail(mailOptions, function(error, response){
-  if(error){
-    console.log(error+1);
-  }else{
-    console.log("Message sent: " + response.message);
-  }
-  mailTransport.close(); // 如果没用，关闭连接池
+mailTransport.sendMail(mailOptions,function(err,info){
+    if(err)
+        console.log('失败',err);
+    else {
+        console.log('成功',info.response);
+    }
+    mailTransport.close();
 });
 
 
 
-// var transporter = nodemailer.createTransport({
-//     // service: '163',
-//     host: "smtp.163.com",
-//     port: 465, // SMTP 端口
-//     secure:true,
-//     auth: {
-//         user: 'liu1114846482',
-//         pass: credentials.gmail.password
-//     }
-// });
-// var mailOptions = {
-//     from: 'liu1114846482@163.com', // sender address
-//     to: 'liu1114846482@163.com', // list of receivers
-//     // subject: 'Hello ✔', // Subject line
-//     text: 'Hello world ✔', // plaintext body
-//     // html: '<b>Hello world ✔</b>' // html body
-// };
-// transporter.sendMail(mailOptions, function (error, info) {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         console.log('Message sent: ' + info.response);
-//     }
-// });
-/*
-*发送邮件
-*/
-// mailTransport.sendMail({
-//     from:`"Meadowlark Travel" <info@meadowlarktravel.com>`,//从哪里发送邮件
-//     //to:'liuruihu@qifadai.com',//发送给谁
-//     to:'joecustomer@gmail.com',
-//     subject:'标题',//发送邮件的标题
-//     text:'内容，你好!!!'//发送内容
-// },function(err){
-//     if(err)
-//     console.error('Unable to send email :' + err);
-// });
+
+
+
+
+
+
+
 
 //引入cookie的中间件cookie-parser中间件
 var cookieParser=require('cookie-parser');
@@ -211,7 +188,6 @@ app.use(express.static(__dirname +'/public'));
         // res.send('Meadowlark Travel,首页');
         res.cookie('monster','nom nom');//设置cookie
         res.cookie('signed_monster','nom nom',{signed:true});//设置签名cookie,true的时候值为加密模式，默认为false
-
 
         res.cookie('cookie','1111111111');
 
