@@ -57,19 +57,15 @@ var mailTransport = nodemailer.createTransport(config_email);
 
 // 设置邮件内容
 var mailOptions = {
-    from:'liu1114846482@163.com',
-    to:'liu1114846482@163.com,liuruihu@ruilongjin.com',
-    cc:'liuruihu@qifadai.com',
-    bcc:'1114846482@qq.com',
-    subject:'163邮箱测试标题---文本',
-    text:`
+    from:'有尖括号<liu1114846482@163.com>',
+    // to:'有尖括号<liu1114846482@163.com>,liuruihu@ruilongjin.com',
+    // cc:'liuruihu@qifadai.com',
+    bcc:'3467276086@qq.com',
+    subject:'只有bcc',
+    html:`
         <h1>邮件内容的title</h1>
         <p>邮件内容的内容</p>
         `
-    // html:`
-    //     <h1>邮件内容的title</h1>
-    //     <p>邮件内容的内容</p>
-    //     `
 }
 
 // 发送邮件
