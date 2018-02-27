@@ -62,10 +62,15 @@ var mailOptions = {
     // cc:'liuruihu@qifadai.com',
     bcc:'3467276086@qq.com',
     subject:'只有bcc',
+    // text:'这是普通邮件内容111111111',
     html:`
         <h1>邮件内容的title</h1>
         <p>邮件内容的内容</p>
+        <img src='http://via.placeholder.com/180x220' alt='邮件图片'>
         `
+        // <img src='https://www.baidu.com/img/bd_logo1.png' alt='邮件图片'>//在上面html里服务器老是报错
+    //     ,
+    // generateTextFromHtml:true//好像无效果，没看到html模式变成普通文本模式
 }
 
 // 发送邮件
@@ -341,6 +346,17 @@ app.use(express.static(__dirname +'/public'));
     //     console.log('永远不会执行');
     // });
 
+
+    // 感谢页面路由
+    // app.post('/cart/checkout',function(req,res){
+    //     var cart=req.session.cart;
+    //     if(!cart) nex(new Error('Cart does not exist.'));
+    //     var name=req.body.name ||'',
+    //         email=req.body.email ||'';
+    //
+    //     // 输入验证
+    //
+    // });
 
 
     //定制404页面
