@@ -152,7 +152,7 @@ mailTransport.sendMail(mailOptions,function(err,info){
     else {
         console.log('成功',info.response);
     }
-    mailTransport.close();
+    // mailTransport.close();
 });
 
 
@@ -420,15 +420,50 @@ app.use(express.static(__dirname +'/public'));
 
 
     // 感谢页面路由
-    // app.post('/cart/checkout',function(req,res){
-    //     var cart=req.session.cart;
-    //     if(!cart) nex(new Error('Cart does not exist.'));
-    //     var name=req.body.name ||'',
-    //         email=req.body.email ||'';
-    //
-    //     // 输入验证
-    //
-    // });
+    app.post('/cart/checkout',function(req,res){
+        var cart=req.session.cart;
+        if(!cart) next(new Error('Cart does not exist.'));
+        var name=req.body.name ||'',
+            email=req.body.email ||'';
+
+        // 输入验证
+        if(!email.match(VALID_EMAIL_REGEX))
+            return res.nex(new Error('Invalid email address'));
+
+        //分配一个随机的购物车ID，一般我们会用一个数据库ID
+        cart.number = Math.random().toString().replace(/^0\.0*/,'');
+        cart.billing = {
+            name:name,
+            email:email
+        }
+
+        res.render('email/cart-thank-you',
+        {
+            layout:null,
+            cart:cart
+        },function(err,html){
+            if(err)
+                console.log('error in email template');
+            mailTransport.sendMail({
+                from:'liu1114846482@163.com',
+                to:cart.billing.email,
+                subject:'Thank You for Book your trip with meadowlark',
+                html:html,
+                generateTextFromHtml:true
+            },function(err){
+                if(err)
+                    console.log('Unable to send confirmation :'+err.stack);
+            });
+        });
+
+        res.render('cart-thank-you',{cart:cart});
+
+    });
+
+    //感谢邮件模板
+    app.get('/email/cart-thank-you',function(req,res){
+        res.render('../email/cart-thank-you',{});
+    });
 
 
     //定制404页面
