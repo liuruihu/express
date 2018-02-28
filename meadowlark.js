@@ -43,10 +43,10 @@ var nodemailer = require('nodemailer');
 // 开启一个 SMTP 连接池
 var config_email = {
     host:'smtp.163.com',
-    // port:'465',
-    port:'25',
+    port:'465',
+    // port:'25',
     // secure:false,//默认为false
-    // secure:true,
+    secure:true,
     // secureConnection:true,
     auth:{
         user:'liu1114846482@163.com',
@@ -57,17 +57,45 @@ var mailTransport = nodemailer.createTransport(config_email);
 
 // 设置邮件内容
 var mailOptions = {
-    from:'有尖括号<liu1114846482@163.com>',
+    from:'<liu1114846482@163.com>',
+    // to:'3467276086@qq.com',
     // to:'有尖括号<liu1114846482@163.com>,liuruihu@ruilongjin.com',
-    // cc:'liuruihu@qifadai.com',
-    bcc:'3467276086@qq.com',
-    subject:'只有bcc',
+    cc:'liuruihu@qifadai.com',
+    // bcc:'3467276086@qq.com,1114846482@qq.com',
+    subject:'这是成功的---false',
     // text:'这是普通邮件内容111111111',
+    attachments:[
+        {
+            filename:'text0.txt',
+            content:'hello world!!!!!!'
+        },
+        {
+            filename:'text33333.txt',
+            path:'./public/vendor/text.txt'
+        },
+        {
+            filename:'图片一',
+            path:'./public/img/logo.png',
+            cid:'1'
+        }
+
+    ],
     html:`
         <h1>邮件内容的title</h1>
         <p>邮件内容的内容</p>
-        <img src='http://via.placeholder.com/180x220' alt='邮件图片'>
+        <a href='http://localhost:3000/about'>点击到 草地鹨</a>
+        <a href='http://www.blogjava.net/zjusuyong/articles/304788.html'>点击到 http外连接</a>
+        <a href='https://www.baidu.com/'>点击到 https外连接</a>
+        <img src='http://via.placeholder.com/180x220' title="http外图片" />
+        <img src="http://localhost:3000/img/Meadowlark.png" alt="Logo" title="草地鹨">
+        <img src='https://www.baidu.com/img/bd_logo1.png' alt='邮件图片' title="https外图片">
+
+        <img src='cid:1' alt='cid' title="cid">
         `
+        // <a href='http://localhost:3000/about'>点击到 草地鹨</a>
+        // <a href='http://www.blogjava.net/zjusuyong/articles/304788.html'>点击到 http外连接</a>
+        // <a href='https://www.baidu.com/'>点击到 草地鹨</a>
+        // <img src='http://via.placeholder.com/180x220' alt='邮件图片'>
         // <img src='https://www.baidu.com/img/bd_logo1.png' alt='邮件图片'>//在上面html里服务器老是报错
     //     ,
     // generateTextFromHtml:true//好像无效果，没看到html模式变成普通文本模式
