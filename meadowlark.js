@@ -58,12 +58,25 @@ var mailTransport = nodemailer.createTransport(config_email);
 // 设置邮件内容
 var mailOptions = {
     from:'<liu1114846482@163.com>',
+    to:'liuruihu@qifadai.com',
     // to:'3467276086@qq.com',
+    // to:'liuruihu@ruilongjin.com',
     // to:'有尖括号<liu1114846482@163.com>,liuruihu@ruilongjin.com',
-    cc:'liuruihu@qifadai.com',
-    // bcc:'3467276086@qq.com,1114846482@qq.com',
-    subject:'这是成功的---false',
+    // cc:'liuruihu@qifadai.com',
+    // bcc:'3467276086@qq.com',
+    subject:'测试QQ发送--附件--连接--图片--qq连接',
     // text:'这是普通邮件内容111111111',
+
+
+    /*
+    * attachments与icalEvent差不多，
+    * 测试结果都是附件功能，
+    * 只不过attachments是个数组，
+    * 里面可以有好几个对象，
+    * 也就是好几个附件，
+    * 而icalEvent他就是一个对象
+    */
+
     attachments:[
         {
             filename:'text0.txt',
@@ -77,21 +90,51 @@ var mailOptions = {
             filename:'图片一',
             path:'./public/img/logo.png',
             cid:'1'
+        },
+        {
+            filename:'图片一',
+            path:'./public/img/logo.png',
+            cid:'2'
         }
-
     ],
+    // icalEvent: {
+    //     filename: 'invitation.txt',
+    //     // method: 'request',
+    //     content: '1111111111111'
+    // },
     html:`
-        <h1>邮件内容的title</h1>
-        <p>邮件内容的内容</p>
-        <a href='http://localhost:3000/about'>点击到 草地鹨</a>
-        <a href='http://www.blogjava.net/zjusuyong/articles/304788.html'>点击到 http外连接</a>
-        <a href='https://www.baidu.com/'>点击到 https外连接</a>
-        <img src='http://via.placeholder.com/180x220' title="http外图片" />
+    <div id="mailContentContainer" class="qmbox qm_con_body_content qqmail_webmail_only" style="">
+    <h1>邮件内容的title</h1>
+    <p>邮件内容的内容</p>
+    <a href="http://localhost:3000/about" target="_blank">点击到 草地鹨</a>
+    <a href="http://www.blogjava.net/zjusuyong/articles/304788.html" target="_blank">点击到 http外连接</a>
+    <a href="https://www.baidu.com/" target="_blank">点击到 https外连接</a>
+
+        <style type="text/css">
+        a{
+            font-size:30px;
+            color:red;
+            display:block;
+        }
+        img{
+            border:solid 10px blue;
+            border-radius:50%;
+        }
+        </style>
+
+        <img src='http://via.placeholder.com/180x220' alt='邮件图片'>
         <img src="http://localhost:3000/img/Meadowlark.png" alt="Logo" title="草地鹨">
         <img src='https://www.baidu.com/img/bd_logo1.png' alt='邮件图片' title="https外图片">
 
         <img src='cid:1' alt='cid' title="cid">
+    </div>
+
+
+
         `
+
+
+
         // <a href='http://localhost:3000/about'>点击到 草地鹨</a>
         // <a href='http://www.blogjava.net/zjusuyong/articles/304788.html'>点击到 http外连接</a>
         // <a href='https://www.baidu.com/'>点击到 草地鹨</a>
@@ -99,6 +142,7 @@ var mailOptions = {
         // <img src='https://www.baidu.com/img/bd_logo1.png' alt='邮件图片'>//在上面html里服务器老是报错
     //     ,
     // generateTextFromHtml:true//好像无效果，没看到html模式变成普通文本模式
+    // ,date: new Date('2000-01-01 00:00:00')
 }
 
 // 发送邮件
