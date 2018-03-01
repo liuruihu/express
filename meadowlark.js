@@ -470,16 +470,37 @@ app.use(express.static(__dirname +'/public'));
         });
     });
 
+    // app.post('/contest/vacation-photo/:year/:month',function(req,res){
+    //     var form=new formidable.IncomingForm();
+    //     form.parse(req,function(err,fields,files){
+    //         if(err) return res.redirect(303,'/error');
+    //
+    //         console.log('received fields\n',fields,'\n','received files:\n',files);
+    //
+    //         res.redirect(303,'/thank - you');
+    //     });
+    // });
+
+    //文件系统fs
+    //却保存在目录data
+    var dataDir=__dirname+'/data';
+    var vacationPhotoDir=dataDir+'/vacation-photo';
+    fs.existsSync(dataDir)||fs.mkdirSync(dataDir);
+    fs.existsSync(vacationPhotoDir)||fs.mkdirSync(vacationPhotoDir);
+
+    function saveContestEntry(contestName,email,year,month,photoPath){
+        //TODO............这个稍后再做
+    }
+
     app.post('/contest/vacation-photo/:year/:month',function(req,res){
         var form=new formidable.IncomingForm();
         form.parse(req,function(err,fields,files){
             if(err) return res.redirect(303,'/error');
-
-            console.log('received fields\n',fields,'\n','received files:\n',files);
-
-            res.redirect(303,'/thank - you');
+            // if
         });
     });
+
+
 
 
     //jquery文件上传中间件
