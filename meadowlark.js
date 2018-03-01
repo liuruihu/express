@@ -1,5 +1,103 @@
 var express = require('express');
 var app = express();
+
+//设置服务器运行环境
+// app.set('env','production');
+
+//根据不同的环境，日志的表现形式有点不同----但我还没看出来哪里不同
+switch(app.get('env')){
+    case 'development':
+        //紧凑的，彩色的开发日志
+        //这里的作用是当你显示不同页面的收获，开发日志会显示加载了那些资源，什么状态
+        app.use(require('morgan')('dev'));
+
+        break;
+    case 'production':
+        //模块'express-logger'支持按日志循环
+        app.use(require('express-logger')({
+            path:__dirname+'/log/requests.log'
+        }));
+
+        break;
+}
+
+/*
+*未捕获异常错误处理--域:-->说是放在所有路由和中间件的前面
+*/
+app.use(function(req,res,next){
+    //为这个请求创建一个域
+    var domain=require('domain').create();
+    //处理这个域中的错误
+    domain.on('error',function(err){
+        console.log('DOMAIN ERROR CAUGHT\n',err.stack);
+        try{
+            //在5秒内进行故障保护关机
+            setTimeout(function(){
+                console.err('Failsafe shutdown.');
+                process.exit(1);
+            },5000);
+
+            //从集群中断开
+            var worker=require('cluster').worker;
+            if(worker) worker.disconnect();
+
+            //停止接收新请求
+            server.close();
+
+            try{
+                //尝试使用Express错误路由
+                next(err);
+            }catch(err){
+                //如果Express错误路由失败，尝试返回普通文本响应
+                console.log('Express error mechanism failed.\n',err.stack);
+                res.statusCode=500;
+                res.setHeader('content-type','text/plain');
+                res.end('Server error');
+            }
+        }catch(err){
+            console.log('Unable to send 500 response.\n',err.stack);
+        }
+    });
+
+    //向域中添加请求和相应对象
+    domain.add(req);
+    domain.add(res);
+
+    //执行该域中剩余的请求链
+    domain.run(next);
+});
+
+//
+
+
+
+
+
+
+
+/*
+*不同工作线程处理不同请求的证据，看到的是'没有东西'，不清楚cluster.isWorker什么时候为真
+*/
+app.use(function(req,res,next){
+    var cluster=require('cluster');
+
+    if(cluster.isWorker){
+        // console.log('有东西');
+        console.log('Worker %d received request',cluster.worker.id);
+    }else{
+        // console.log('没有东西');
+    }
+    next();
+});
+
+
+
+
+
+
+
+
+
 app.set('port',process.env.PORT || 3000);
 
 //引入'幸运虚拟饼干'模块
@@ -146,14 +244,14 @@ var mailOptions = {
 }
 
 // 发送邮件
-mailTransport.sendMail(mailOptions,function(err,info){
-    if(err)
-        console.log('失败',err);
-    else {
-        console.log('成功',info.response);
-    }
-    // mailTransport.close();
-});
+// mailTransport.sendMail(mailOptions,function(err,info){
+//     if(err)
+//         console.log('失败',err);
+//     else {
+//         console.log('成功',info.response);
+//     }
+//     // mailTransport.close();
+// });
 
 
 
@@ -259,6 +357,7 @@ app.use(express.static(__dirname +'/public'));
     app.get('/',function(req,res){
         // res.type('text/plain');
         // res.send('Meadowlark Travel,首页');
+
         res.cookie('monster','nom nom');//设置cookie
         res.cookie('signed_monster','nom nom',{signed:true});//设置签名cookie,true的时候值为加密模式，默认为false
 
@@ -466,6 +565,31 @@ app.use(express.static(__dirname +'/public'));
     });
 
 
+
+
+    //处理未捕获异常
+    app.get('/fail',function(req,res){
+        throw new Error('Nope');
+    });
+
+    //更糟糕的错误处理
+    app.get('/epic-fail',function(req,res){
+        process.nextTick(function(){
+            throw new Error('Kaboom!!');
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
     //定制404页面
     app.use(function(req,res){
         // res.type('text/plain');
@@ -488,20 +612,67 @@ app.use(express.static(__dirname +'/public'));
 
     //定制500页面
     app.use(function(err,req,res,next){
+        var config_email = {
+            host:'smtp.163.com',
+            port:'25',
+            auth:{
+                user:'liu1114846482@163.com',
+                pass:'liu19890708'//设立时网易邮箱授权码
+            }
+        }
+        var mailTransport = nodemailer.createTransport(config_email);
+
+        // 设置邮件内容
+        var mailOptions = {
+            from:'<liu1114846482@163.com>',
+            to:'liuruihu@qifadai.com',
+            subject:'出错了',
+            text:'网站出问题了，赶快找专家看看！！！！'
+        }
+
+        // 发送邮件
+        mailTransport.sendMail(mailOptions,function(err,info){
+            if(err)
+                console.log('失败',err);
+            else {
+                console.log('成功',info.response);
+            }
+            // mailTransport.close();
+        });
+
         console.log(err.stack);
         // res.type('text/plain');
         res.status(500);
         // res.send('500 - Server Error');
-        res.render('500');
+        res.render('500',{
+            a:'我就是那个数据'
+        });
     });
 /*结束
 *设置路由
 */
 
 
+console.log('运行的环境为：'+app.get('env'));
 
 
 
 app.listen(app.get('port'),function(){
     console.log(`Express started on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
 });
+// function startServer(){
+//     app.listen(app.get('port'),function(){
+//         console.log(`Express started on http://localhost:${app.get('port')}; press Ctrl-C to terminate.`);
+//     });
+// }
+//
+// if(require.main===module){
+//     //应用程序直接运行，启动应用服务器
+//     console.log('直接运行');
+//     startServer();
+// }else{
+//     //应用程序作为一个模块通过require引入，导出函数
+//     //创建服务器
+//     console.log('模块引入运行');
+//     // module.exports=startServer;
+// }
