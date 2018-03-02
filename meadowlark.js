@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var fs=require('fs');
 
 //设置服务器运行环境
 // app.set('env','production');
@@ -488,17 +489,17 @@ app.use(express.static(__dirname +'/public'));
     fs.existsSync(dataDir)||fs.mkdirSync(dataDir);
     fs.existsSync(vacationPhotoDir)||fs.mkdirSync(vacationPhotoDir);
 
-    function saveContestEntry(contestName,email,year,month,photoPath){
-        //TODO............这个稍后再做
-    }
+    // function saveContestEntry(contestName,email,year,month,photoPath){
+    //     //TODO............这个稍后再做
+    // }
 
-    app.post('/contest/vacation-photo/:year/:month',function(req,res){
-        var form=new formidable.IncomingForm();
-        form.parse(req,function(err,fields,files){
-            if(err) return res.redirect(303,'/error');
-            // if
-        });
-    });
+    // app.post('/contest/vacation-photo/:year/:month',function(req,res){
+    //     var form=new formidable.IncomingForm();
+    //     form.parse(req,function(err,fields,files){
+    //         if(err) return res.redirect(303,'/error');
+    //         // if
+    //     });
+    // });
 
 
 
